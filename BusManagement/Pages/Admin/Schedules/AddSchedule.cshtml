@@ -1,4 +1,4 @@
-﻿@page
+@page
 @{
     Layout = null;  // Use the default layout for the page
 }
@@ -35,7 +35,7 @@
                 <option value="" disabled selected>Select a bus</option>
                 @foreach (var bus in Model.Buses)
                 {
-                            <option value="@bus.BusId">@bus.BusNumber</option>
+                    <option value="@bus.BusId">@bus.BusNumber</option>
                 }
             </select>
         </div>
@@ -47,7 +47,7 @@
                 <option value="" disabled selected>Select a route</option>
                 @foreach (var route in Model.Routes)
                 {
-                            <option value="@route.RouteId">@route.Origin to @route.Destination</option>
+                    <option value="@route.RouteId">@route.Origin to @route.Destination</option>
                 }
             </select>
         </div>
@@ -55,13 +55,17 @@
         <!-- Departure Time -->
         <div class="form-group mb-3">
             <label for="DepartureTime">Departure Time</label>
-            <input type="datetime-local" id="DepartureTime" name="DepartureTime" class="form-control" required />
+            <input type="datetime-local" id="DepartureTime" name="DepartureTime" class="form-control"
+                   value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
         </div>
 
         <!-- Arrival Time -->
         <div class="form-group mb-4">
             <label for="ArrivalTime">Arrival Time</label>
-            <input type="datetime-local" id="ArrivalTime" name="ArrivalTime" class="form-control" required />
+            <input type="datetime-local" id="ArrivalTime" name="ArrivalTime" class="form-control"
+                   value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
         </div>
 
         <!-- Submit Button -->
@@ -70,3 +74,18 @@
         </button>
     </form>
 </div>
+
+<!-- JS to ensure ArrivalTime is after DepartureTime -->
+<script>
+    const departureInput = document.getElementById('DepartureTime');
+    const arrivalInput = document.getElementById('ArrivalTime');
+
+    departureInput.addEventListener('change', () => {
+        // Set the min of arrival time to departure time
+        arrivalInput.min = departureInput.value;
+        // If arrival is before departure, set it to departure
+        if (arrivalInput.value < departureInput.value) {
+            arrivalInput.value = departureInput.value;
+        }
+    });
+</script>
