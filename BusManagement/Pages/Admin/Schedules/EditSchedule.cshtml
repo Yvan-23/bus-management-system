@@ -1,4 +1,4 @@
-﻿@page
+@page
 @{
     Layout = null;  // Use the default layout for the page
 }
@@ -37,13 +37,19 @@
         <!-- Departure Time -->
         <div class="form-group mb-3">
             <label for="DepartureTime">Departure Time</label>
-            <input type="datetime-local" class="form-control" id="DepartureTime" name="DepartureTime" asp-for="DepartureTime" required />
+            <input type="datetime-local" class="form-control" id="DepartureTime" name="DepartureTime"
+                   asp-for="DepartureTime"
+                   value="@Model.DepartureTime.ToString("yyyy-MM-ddTHH:mm")"
+                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
         </div>
 
         <!-- Arrival Time -->
         <div class="form-group mb-4">
             <label for="ArrivalTime">Arrival Time</label>
-            <input type="datetime-local" class="form-control" id="ArrivalTime" name="ArrivalTime" asp-for="ArrivalTime" required />
+            <input type="datetime-local" class="form-control" id="ArrivalTime" name="ArrivalTime"
+                   asp-for="ArrivalTime"
+                   value="@Model.ArrivalTime.ToString("yyyy-MM-ddTHH:mm")"
+                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
         </div>
 
         <!-- Submit Button -->
@@ -52,3 +58,18 @@
         </button>
     </form>
 </div>
+
+<!-- JS to ensure ArrivalTime is after DepartureTime -->
+<script>
+    const departureInput = document.getElementById('DepartureTime');
+    const arrivalInput = document.getElementById('ArrivalTime');
+
+    departureInput.addEventListener('change', () => {
+        // Set the min of arrival time to departure time
+        arrivalInput.min = departureInput.value;
+        // If arrival is before departure, set it to departure
+        if (arrivalInput.value < departureInput.value) {
+            arrivalInput.value = departureInput.value;
+        }
+    });
+</script>
